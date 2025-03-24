@@ -9,6 +9,7 @@ void main() {
 
 // StatelessWidget を拡張しています
 // ウィジェットは、すべての Flutter アプリを作成する際の元になる要素です
+// 画面に表示されるすべてのものはウィジェットです。
 // このアプリ自体がウィジェットです
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -19,28 +20,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
+        // これはアプリのテーマ設定です。
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
+
+
 }
 
+// ChangeNotifier：自身の変更に関する通知を行うことができる
 class MyAppState extends ChangeNotifier {
   // WordPair って何をするクラスか？
   // 英単語2つを組み合わせてくれるクラス
@@ -48,73 +38,74 @@ class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
 }
 
+// 状態管理を登録
+// このウィジェットはアプリのホームページです。これは「ステートフル（Stateful）」なウィジェットであり、
+// 状態（State）オブジェクト（下で定義）を持ち、その中のフィールドが見た目に影響を与えます。
+
+// このクラスは、その状態（State）のための設定を行います。
+// 親ウィジェット（この場合は App ウィジェット）から渡された値（ここでは title）を保持し、
+// Stateクラスの build メソッド内で使用されます。
+// Widgetサブクラス内のフィールドは、常に「final（変更不可）」として定義されます。
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+// 状態管理したい物を定義
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
+    // 状態の変化を検知
+    // この setState の呼び出しは、Flutter フレームワークに「この State 内で何かが変化した」ことを伝えます。
+    // その結果、下の build メソッドが再実行され、画面が最新の値を反映するように更新されます。
+    // もし setState を使わずに _counter を変更しても、build メソッドは再実行されないため、
+    // 見た目には何も変化が起こりません。
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
 
+  // 状態変化を検知したら実行する処理
+  // buildメソッドは、setState が呼ばれるたびに再実行されます。
+  // たとえば、上の _incrementCounter メソッド内で setState が呼ばれた場合などです。
+  //
+  // Flutter フレームワークは、build メソッドの再実行を高速に処理できるよう最適化されています。
+  // そのため、変更が必要な部分だけを再描画すればよく、
+  // 各ウィジェットのインスタンスを個別に手動で更新する必要はありません。
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // Scaffoldとは？
+    // アプリ画面の「大枠」になるウィジェットで、1画面に基本的に 1つだけ使います。
+    // つまり、レイアウトのコードの一番外側に置く「土台（骨組み）」の役割
+
+    // Flutterアプリの 1ページ分（画面1つ） = Scaffold 1つ が基本
+    // Scaffoldの中に、AppBar, body, FloatingActionButton, Drawer, BottomNavigationBar などを入れていく
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+        // ここでは、App.build メソッドによって作成された MyHomePage オブジェクトから値（title）を取得し、
+        // AppBar のタイトルとして使用しています。
         title: Text(widget.title),
       ),
+      // Center はレイアウト用のウィジェットです。
+      // 1つの子ウィジェットを受け取り、それを親ウィジェットの中央に配置します。
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+        // Column もレイアウト用のウィジェットです。
+        // 子ウィジェットのリストを受け取り、それらを縦方向に並べます。
+        // デフォルトでは、横幅は子ウィジェットに合わせて調整され、高さは親ウィジェットいっぱいまで広がろうとします。
+        //
+        // Column にはサイズや子ウィジェットの配置方法を制御するさまざまなプロパティがあります。
+        // ここでは mainAxisAlignment を使って、子ウィジェットを縦方向の中央に配置しています。
+        // Column は縦に並ぶため、メイン軸（main axis）は縦軸、クロス軸（cross axis）は横軸になります。
+        //
+        // 試してみましょう："debug painting" を有効にしてみてください
+        // （IDEで "Toggle Debug Paint" を選ぶか、コンソールで "p" を押します）。
+        // 各ウィジェットのワイヤーフレーム（枠線）が表示されます。
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
@@ -125,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // とりあえず追加してみた
             ElevatedButton(
               onPressed: () {
+                // 警告：本番コードで 'print' を使用しないでください。
                 print('button pressed!');
               },
               child: Text('Next'),
@@ -136,7 +128,9 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      // この末尾のカンマ（trailing comma）は、buildメソッド内のコードの自動整形をきれいにするためのものです
+      // Flutterでは、末尾にカンマを付けると、自動フォーマット時にコードが縦に整形されて読みやすくなります。
     );
   }
 }

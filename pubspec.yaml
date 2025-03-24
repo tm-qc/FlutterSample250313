@@ -37,6 +37,7 @@ dependencies:
   #  import 'package:english_words/english_words.dart';のときのエラーを消すために必要
   #  記載後にコマンド flutter pub get で取得すればインポートエラーが消える
   english_words: ^4.0.0
+  provider: ^6.0.0
 
 dev_dependencies:
   flutter_test:
