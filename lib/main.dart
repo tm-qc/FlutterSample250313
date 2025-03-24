@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
+// import 'package:provider/provider.dart';
 
+// class MyAppを呼びアプリの実行を Flutter に指示する
 void main() {
   runApp(const MyApp());
 }
 
+// StatelessWidget を拡張しています
+// ウィジェットは、すべての Flutter アプリを作成する際の元になる要素です
+// このアプリ自体がウィジェットです
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -33,6 +39,10 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
+}
+
+class MyAppState extends ChangeNotifier {
+  var current = WordPair.random();
 }
 
 class MyHomePage extends StatefulWidget {
@@ -108,6 +118,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            // とりあえず追加してみた
+            ElevatedButton(
+              onPressed: () {
+                print('button pressed!');
+              },
+              child: Text('Next'),
             ),
           ],
         ),

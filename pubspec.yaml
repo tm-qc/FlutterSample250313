@@ -34,6 +34,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  #  import 'package:english_words/english_words.dart';のときのエラーを消すために必要
+  #  記載後にコマンド flutter pub get で取得すればインポートエラーが消える
+  english_words: ^4.0.0
 
 dev_dependencies:
   flutter_test:
