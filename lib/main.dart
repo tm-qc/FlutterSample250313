@@ -42,6 +42,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
+  // WordPair って何をするクラスか？
+  // 英単語2つを組み合わせてくれるクラス
+  // 簡単なチュートリアルの例でよく使われる
   var current = WordPair.random();
 }
 
