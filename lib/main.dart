@@ -42,6 +42,13 @@ class MyApp extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
   // ランダムな単語のペアを収めた変数
   var current = WordPair.random();
+
+  // current に新しいランダムな WordPair を再代入します
+  void getNext() {
+    current = WordPair.random();
+    // 監視している MyAppState に通知するために notifyListeners()（ChangeNotifier) のメソッド）の呼び出しも行います。
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -67,7 +74,8 @@ class MyHomePage extends StatelessWidget {
           // ボタン追加
           ElevatedButton(
             onPressed: () {
-              print('button pressed!');
+              // イベントトリガー
+              appState.getNext();
             },
             child: Text('Next'),
           ),
