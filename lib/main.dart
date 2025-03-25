@@ -28,8 +28,16 @@ class MyApp extends StatelessWidget {
       create: (context) => MyAppState(),
       child: MaterialApp(
         title: 'Namer App',
+        // Material Design 3 を使用することを指定
+        // アプリの基本デザインをMaterial Design 3のテーマデータに沿って作成するということ
+        // 特に設定していなければ、Flutter は デフォルトのテーマ を使用する
+
+        // CSS のように「外部スタイルファイルを作って適用する」仕組みは Flutter にはない。
+        // ただし、代わりに ThemeData や TextStyle などを統一管理する のが一般的らしいです
         theme: ThemeData(
           useMaterial3: true,
+          // 任意の色を選択することもできます
+          // 例）Colors.deepOrange→Colors.blueなど
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
         home: MyHomePage(),
@@ -96,7 +104,15 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // MaterialAppで設定されたテーマデータを取得
+    // アプリ全体が対象の Theme を使用するメリットは関連も自動で変わるので、修正漏れがなく統一性がでるということ
+    final theme = Theme.of(context);
+
     return Card(
+      // テーマデータから取得した色を設定
+      // MyApp までスクロールし、そこで ColorScheme のシード色を変更すると、
+      // この色とアプリ全体のカラーパターンを変更できます
+      color: theme.colorScheme.primary,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Text(pair.asLowerCase),
