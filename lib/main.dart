@@ -63,6 +63,7 @@ class MyHomePage extends StatelessWidget {
 
     // watch メソッドを使用してアプリの現在の状態に対する変更を追跡
     var appState = context.watch<MyAppState>();
+    var pair = appState.current;
 
     return Scaffold(
       // Flutter における非常に基本的なレイアウト ウィジェットです
@@ -70,7 +71,7 @@ class MyHomePage extends StatelessWidget {
       body: Column(
         children: [
           Text('A random idea:ABC'),
-          Text(appState.current.asLowerCase),
+          BigCard(pair: pair),
           // ボタン追加
           ElevatedButton(
             onPressed: () {
@@ -80,6 +81,25 @@ class MyHomePage extends StatelessWidget {
             child: Text('Next'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BigCard extends StatelessWidget {
+  const BigCard({
+    super.key,
+    required this.pair,
+  });
+
+  final WordPair pair;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(pair.asLowerCase),
       ),
     );
   }
