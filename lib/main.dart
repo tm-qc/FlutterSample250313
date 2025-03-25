@@ -108,6 +108,20 @@ class BigCard extends StatelessWidget {
     // アプリ全体が対象の Theme を使用するメリットは関連も自動で変わるので、修正漏れがなく統一性がでるということ
     final theme = Theme.of(context);
 
+    // final
+    // theme.textTheme：アプリのフォントテーマにアクセス
+    // displayMedium：ディスプレイ テキスト用の大きなスタイル
+    // ※displayは「ディスプレイ スタイルは短く、重要なテキストにのみ使用します」
+    //
+    // ! 演算子:Dartはnull になる可能性のあるオブジェクトのメソッドは呼び出せません
+    // 　　　　　! 演算子（感嘆符演算子）を使い、承知のうえで行っているということを Dart に対して通知
+    //
+    // copyWith() ：定義した変更が反映されたテキスト スタイルのコピーが返されます
+    // 　　　　　　　　この場合は、テキストの色のみを変更しています
+    final style = theme.textTheme.displayMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+    );
+
     return Card(
       // テーマデータから取得した色を設定
       // MyApp までスクロールし、そこで ColorScheme のシード色を変更すると、
@@ -115,7 +129,7 @@ class BigCard extends StatelessWidget {
       color: theme.colorScheme.primary,
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Text(pair.asLowerCase),
+        child: Text(pair.asLowerCase, style: style),
       ),
     );
   }
