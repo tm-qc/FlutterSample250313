@@ -99,6 +99,16 @@ class MyHomePage extends StatelessWidget {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
 
+    // IconData は Icon ウィジェットで使うためのデータ型
+    // インストールしたFlutter本体から参照しているらしい
+    // 今回の私のローカル環境の場合は「C:\data\flutter」にある「packages\flutter\lib\src\widgets\icon.dart」から参照してる
+    IconData icon;// アイコンのデータを入れる変数
+    if (appState.favorites.contains(pair)) {
+      icon = Icons.favorite;// お気に入りに含まれていたら「♥」
+    } else {
+      icon = Icons.favorite_border;// 含まれていなければ「♡」
+    }
+
     return Scaffold(
       // Flutter における非常に基本的なレイアウト ウィジェットです
       // 任意の数の子を従え、それらを上から下へ一列に配置します
@@ -112,12 +122,29 @@ class MyHomePage extends StatelessWidget {
             // 視覚的な「ギャップ」を作るためによく利用されます。
             SizedBox(height: 10),
             // ボタン追加
-            ElevatedButton(
-              onPressed: () {
-                // イベントトリガー
-                appState.getNext();
-              },
-              child: Text('Next'),
+            Row(
+              // Rowで使うと、横方向（幅）サイズを「最小限にする」か「最大限に広げる」か決められる
+              // =この場合ボタンが一個だと最左に寄っていたが、センター表示になる
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // ElevatedButton は 「押すとイベント（処理）が発生するボタン」 という意味
+                ElevatedButton.icon(
+                  onPressed: () {
+                    appState.toggleFavorite();
+                  },
+                  icon: Icon(icon),
+                  label: Text('Like'),
+                ),
+                SizedBox(width: 10),
+
+                ElevatedButton(
+                  onPressed: () {
+                    // イベントトリガー
+                    appState.getNext();
+                  },
+                  child: Text('Next'),
+                ),
+              ],
             ),
           ],
         ),
