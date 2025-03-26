@@ -77,6 +77,7 @@ class MyHomePage extends StatelessWidget {
       // Flutter における非常に基本的なレイアウト ウィジェットです
       // 任意の数の子を従え、それらを上から下へ一列に配置します
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('A random idea:ABC'),
           BigCard(pair: pair),
