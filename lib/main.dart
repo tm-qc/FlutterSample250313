@@ -82,6 +82,9 @@ class MyHomePage extends StatelessWidget {
           children: [
             Text('A random idea:ABC'),
             BigCard(pair: pair),
+            // SizedBox ウィジェットはスペースを埋めるだけで、それ自身は何もレンダリングしません
+            // 視覚的な「ギャップ」を作るためによく利用されます。
+            SizedBox(height: 10),
             // ボタン追加
             ElevatedButton(
               onPressed: () {
