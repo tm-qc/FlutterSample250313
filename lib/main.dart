@@ -76,20 +76,22 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       // Flutter における非常に基本的なレイアウト ウィジェットです
       // 任意の数の子を従え、それらを上から下へ一列に配置します
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('A random idea:ABC'),
-          BigCard(pair: pair),
-          // ボタン追加
-          ElevatedButton(
-            onPressed: () {
-              // イベントトリガー
-              appState.getNext();
-            },
-            child: Text('Next'),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('A random idea:ABC'),
+            BigCard(pair: pair),
+            // ボタン追加
+            ElevatedButton(
+              onPressed: () {
+                // イベントトリガー
+                appState.getNext();
+              },
+              child: Text('Next'),
+            ),
+          ],
+        ),
       ),
     );
   }
