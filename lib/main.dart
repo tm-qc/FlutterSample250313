@@ -57,6 +57,32 @@ class MyAppState extends ChangeNotifier {
     // 監視している MyAppState に通知するために notifyListeners()（ChangeNotifier) のメソッド）の呼び出しも行います。
     notifyListeners();
   }
+
+  // このプロパティは空のリスト [] で初期化されています
+  // <>(ジェネリクス)を使って、このリストが <WordPair>[] のみを含むように指定
+  // これにより、WordPair 以外を追加しようとすると、Dart によりアプリの実行すら拒否されるようになります
+  // favorites リストに望ましくないオブジェクト（null など）が入らなくなる
+
+  // 注意
+  // Dart には List（[] で表記）以外にもコレクション型があります
+  // お気に入りのコレクションには Set（{} で表記）のほうが理にかなっているとも言えます
+  //
+  // 多分こんな違いらしい
+  // List<WordPair>＝<WordPair>[] を使うと、同じ単語を複数回追加できてしまう → 望ましくない
+  // Set<WordPair>＝<WordPair>{} を使えば、自動的に重複を防いでくれる → 便利！
+  var favorites = <WordPair>[];
+
+  void toggleFavorite() {
+    if (favorites.contains(current)) {
+      favorites.remove(current);// すでにお気に入りなら削除
+    } else {
+      favorites.add(current);// まだお気に入りでなければ追加
+    }
+    // notifyListeners() は ChangeNotifier を継承したクラス で使われるメソッド
+    // データの変更をリスナー（UIなど）に通知 するためのもの
+    notifyListeners();
+  }
+
 }
 
 class MyHomePage extends StatelessWidget {
