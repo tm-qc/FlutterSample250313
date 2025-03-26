@@ -43,3 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Dart & Flutter の DevTools の設定を保存するためのもの
+# Flutter の開発環境で DevTools を開いた際に、自動的に生成される可能性があります
+# 特に共有不要なので除外
+devtools_options.yaml
