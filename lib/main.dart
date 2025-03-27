@@ -111,6 +111,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Flutterの変数って？
+    // var 変数名：型推論
+    // 型名 変数名：Widget page; のように、初期化時に値が代入されない場合は、明示的に型を指定する必要があります。
+    //
+    // ※Dartでも出来るだけ型定義しながら書くらしい。
+
+    // ページを切り替えるためのウィジェット変数
+    Widget page;
+    switch (selectedIndex) {
+      case 0:
+        // class GeneratorPageを表示
+        page = GeneratorPage();
+        break;
+      case 1:
+        // Placeholder という、配置した場所に十字が入った四角形を描画して、その部分の UI が未完成であることを示す便利なウィジェットを使用します
+        page = Placeholder();
+        break;
+      // selectedIndex が 0 でも 1 でもない場合にエラーをスロー
+      default:
+        throw UnimplementedError('no widget for $selectedIndex');
+    }
+
     // Scaffold：親要素。各ページに一つ使う
     return Scaffold(
       // 横並びのレイアウト
@@ -153,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,
-              child: GeneratorPage(),
+              child: page,
             ),
           ),
         ],
