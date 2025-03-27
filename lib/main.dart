@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'Name App',
         // Material Design 3 を使用することを指定
         // アプリの基本デザインをMaterial Design 3のテーマデータに沿って作成するということ
         // 特に設定していなければ、Flutter は デフォルトのテーマ を使用する
