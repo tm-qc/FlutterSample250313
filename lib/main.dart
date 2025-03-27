@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// アプリが機能するために必要となるデータを定義します
+// アプリが機能するために必要となるデータを状態管理(リアクティブな値）で定義します
 class MyAppState extends ChangeNotifier {
   // ランダムな単語のペアを収めた変数
   var current = WordPair.random();
@@ -89,65 +89,110 @@ class MyHomePage extends StatelessWidget {
   // 警告：Constructors for public widgets should have a named 'key' parameter.が出てたので追加
   // FlutterのLintルール（コード品質のルール） のひとつで、公開クラス（外部から使われるWidget）にはkeyパラメータを明示的に定義するべきというルール
   const MyHomePage({super.key});
-  // @overrideって？
-  // 「親のbuild()を自分用に書き直してるよ」ということを明示
-  @override
-  // Widgetを表示するとき（初回や再描画時）に必ず呼ばれるメソッド
-  Widget build(BuildContext context) {
 
-    // watch メソッドを使用してアプリの現在の状態に対する変更を追跡
+  @override
+  Widget build(BuildContext context) {
+    // Scaffold：親要素。各ページに一つ使う
+    return Scaffold(
+      // 横並びのレイアウト
+      body: Row(
+        children: [
+          // スマホのノッチ（切り欠き）やステータスバー、ナビゲーションバーにコンテンツが重ならないようにするためのウィジェット
+          SafeArea(
+            //　画面の左側に縦に並ぶメニュー（ナビゲーションバー）を作るためのウィジェット
+            child: NavigationRail(
+              // false の行は true に変更できます
+              // そうすることで、アイコンの隣のラベルが表示されます
+              extended: false,
+              destinations: [
+                // 1つのメニュー項目（ボタン）を表すウィジェット
+                NavigationRailDestination(
+                  icon: Icon(Icons.home),
+                  label: Text('Home'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.favorite),
+                  label: Text('Favorites'),
+                ),
+              ],
+              // メニューのデフォルトの選択肢を最初にする
+              selectedIndex: 0,
+              // ナビゲーションメニュー（NavigationRail）のボタンが押されたときに呼ばれる処理を定義
+              onDestinationSelected: (value) {
+                print('selected: $value');
+              },
+            ),
+          ),
+          // Expanded ウィジェットは Row や Column で使用すると非常に便利
+          // RowやColumnの中で「空いてるスペースをめいっぱい使いたい」ウィジェットに使うラッパー
+          //
+          // これを使用すると、ある子は必要なだけのスペースを埋め（この場合は NavigationRail）
+          // 別のウィジェットは残りのスペースをできる限り埋める（この場合は Expanded）
+          Expanded(
+            child: Container(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: GeneratorPage(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class GeneratorPage extends StatelessWidget {
+  // 警告：Constructors for public widgets should have a named 'key' parameter.が出てたので追加
+  // FlutterのLintルール（コード品質のルール） のひとつで、公開クラス（外部から使われるWidget）にはkeyパラメータを明示的に定義するべきというルール
+  const GeneratorPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
 
-    // IconData は Icon ウィジェットで使うためのデータ型
-    // インストールしたFlutter本体から参照しているらしい
-    // 今回の私のローカル環境の場合は「C:\data\flutter」にある「packages\flutter\lib\src\widgets\icon.dart」から参照してる
-    IconData icon;// アイコンのデータを入れる変数
+    IconData icon;
     if (appState.favorites.contains(pair)) {
-      icon = Icons.favorite;// お気に入りに含まれていたら「♥」
+      icon = Icons.favorite;
     } else {
-      icon = Icons.favorite_border;// 含まれていなければ「♡」
+      icon = Icons.favorite_border;
     }
 
-    return Scaffold(
-      // Flutter における非常に基本的なレイアウト ウィジェットです
-      // 任意の数の子を従え、それらを上から下へ一列に配置します
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('A random idea:ABC'),
-            BigCard(pair: pair),
-            // SizedBox ウィジェットはスペースを埋めるだけで、それ自身は何もレンダリングしません
-            // 視覚的な「ギャップ」を作るためによく利用されます。
-            SizedBox(height: 10),
-            // ボタン追加
-            Row(
-              // Rowで使うと、横方向（幅）サイズを「最小限にする」か「最大限に広げる」か決められる
-              // =この場合ボタンが一個だと最左に寄っていたが、センター表示になる
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // ElevatedButton は 「押すとイベント（処理）が発生するボタン」 という意味
-                ElevatedButton.icon(
-                  onPressed: () {
-                    appState.toggleFavorite();
-                  },
-                  icon: Icon(icon),
-                  label: Text('Like'),
-                ),
-                SizedBox(width: 10),
-
-                ElevatedButton(
-                  onPressed: () {
-                    // イベントトリガー
-                    appState.getNext();
-                  },
-                  child: Text('Next'),
-                ),
-              ],
-            ),
-          ],
-        ),
+    // 全体の真ん中にレイアウト
+    return Center(
+      // 縦方向のレイアウト
+      child: Column(
+        // 子要素を中央配置
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BigCard(pair: pair),
+          SizedBox(height: 10),
+          // 横方向のレイアウト
+          Row(
+            // ウィジェットのサイズを最小限にする
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // イベントボタン
+              ElevatedButton.icon(
+                onPressed: () {
+                  appState.toggleFavorite();
+                },
+                icon: Icon(icon),
+                label: Text('Like'),
+              ),
+              // SizedBox ウィジェットはスペースを埋めるだけで、それ自身は何もレンダリングしません
+              // 視覚的な「ギャップ」を作るためによく利用されます。
+              // SizedBox(width: 10)：横方向のすき間を作る（Rowの中で使う）
+              // ちなみに・・SizedBox(height: 10)	：縦方向のすき間を作る（Columnの中で使う）
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  appState.getNext();
+                },
+                child: Text('Next'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
