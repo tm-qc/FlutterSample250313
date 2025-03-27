@@ -85,11 +85,16 @@ class MyAppState extends ChangeNotifier {
 
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   // 警告：Constructors for public widgets should have a named 'key' parameter.が出てたので追加
   // FlutterのLintルール（コード品質のルール） のひとつで、公開クラス（外部から使われるWidget）にはkeyパラメータを明示的に定義するべきというルール
   const MyHomePage({super.key});
 
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // Scaffold：親要素。各ページに一つ使う
