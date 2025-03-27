@@ -85,16 +85,30 @@ class MyAppState extends ChangeNotifier {
 
 }
 
+// StatefulWidget+serStateパターンの状態管理を作成
+//
+// 書き方
+// ClassName StatefulWidgetクラスを定義（class MyHomePage extends StatefulWidget）
+// ↓
+// _ClassName Stateクラスを定義（class _MyHomePageState extends State<MyHomePage>）
+// ※ここまではAndoroid Studioでクラス名を右クリック→コンテキストアクションの表示→Convert to StatefulWidgetをクリックで自動で雛形を作れる
+// ↓
+//_ClassName Stateクラスに変数定義し、setState()で状態管理ができる
 class MyHomePage extends StatefulWidget {
   // 警告：Constructors for public widgets should have a named 'key' parameter.が出てたので追加
   // FlutterのLintルール（コード品質のルール） のひとつで、公開クラス（外部から使われるWidget）にはkeyパラメータを明示的に定義するべきというルール
   const MyHomePage({super.key});
 
   @override
+  // 中身を記載した_ClassNameのStateクラスを呼び出す
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+// ClassName StatefulWidgetの中身を_ClassName Stateに書く
 class _MyHomePageState extends State<MyHomePage> {
+
+  var selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     // Scaffold：親要素。各ページに一つ使う
@@ -121,10 +135,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
               // メニューのデフォルトの選択肢を最初にする
-              selectedIndex: 0,
+              selectedIndex: selectedIndex,
               // ナビゲーションメニュー（NavigationRail）のボタンが押されたときに呼ばれる処理を定義
               onDestinationSelected: (value) {
-                print('selected: $value');
+                // StatefulWidgetなのでsteStateが使え、状態管理で状態が変わるとUIも自動で再描画される
+                setState(() {
+                  selectedIndex = value;
+                });
               },
             ),
           ),
