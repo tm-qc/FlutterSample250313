@@ -135,52 +135,56 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // Scaffold：親要素。各ページに一つ使う
-    return Scaffold(
-      // 横並びのレイアウト
-      body: Row(
-        children: [
-          // スマホのノッチ（切り欠き）やステータスバー、ナビゲーションバーにコンテンツが重ならないようにするためのウィジェット
-          SafeArea(
-            //　画面の左側に縦に並ぶメニュー（ナビゲーションバー）を作るためのウィジェット
-            child: NavigationRail(
-              // false の行は true に変更できます
-              // そうすることで、アイコンの隣のラベルが表示されます
-              extended: false,
-              destinations: [
-                // 1つのメニュー項目（ボタン）を表すウィジェット
-                NavigationRailDestination(
-                  icon: Icon(Icons.home),
-                  label: Text('Home'),
+    return Builder(
+      builder: (context) {
+        return Scaffold(
+          // 横並びのレイアウト
+          body: Row(
+            children: [
+              // スマホのノッチ（切り欠き）やステータスバー、ナビゲーションバーにコンテンツが重ならないようにするためのウィジェット
+              SafeArea(
+                //　画面の左側に縦に並ぶメニュー（ナビゲーションバー）を作るためのウィジェット
+                child: NavigationRail(
+                  // false の行は true に変更できます
+                  // そうすることで、アイコンの隣のラベルが表示されます
+                  extended: true,
+                  destinations: [
+                    // 1つのメニュー項目（ボタン）を表すウィジェット
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text('Home'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.favorite),
+                      label: Text('Favorites'),
+                    ),
+                  ],
+                  // メニューのデフォルトの選択肢を最初にする
+                  selectedIndex: selectedIndex,
+                  // ナビゲーションメニュー（NavigationRail）のボタンが押されたときに呼ばれる処理を定義
+                  onDestinationSelected: (value) {
+                    // StatefulWidgetなのでsteStateが使え、状態管理で状態が変わるとUIも自動で再描画される
+                    setState(() {
+                      selectedIndex = value;
+                    });
+                  },
                 ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.favorite),
-                  label: Text('Favorites'),
+              ),
+              // Expanded ウィジェットは Row や Column で使用すると非常に便利
+              // RowやColumnの中で「空いてるスペースをめいっぱい使いたい」ウィジェットに使うラッパー
+              //
+              // これを使用すると、ある子は必要なだけのスペースを埋め（この場合は NavigationRail）
+              // 別のウィジェットは残りのスペースをできる限り埋める（この場合は Expanded）
+              Expanded(
+                child: Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: page,
                 ),
-              ],
-              // メニューのデフォルトの選択肢を最初にする
-              selectedIndex: selectedIndex,
-              // ナビゲーションメニュー（NavigationRail）のボタンが押されたときに呼ばれる処理を定義
-              onDestinationSelected: (value) {
-                // StatefulWidgetなのでsteStateが使え、状態管理で状態が変わるとUIも自動で再描画される
-                setState(() {
-                  selectedIndex = value;
-                });
-              },
-            ),
+              ),
+            ],
           ),
-          // Expanded ウィジェットは Row や Column で使用すると非常に便利
-          // RowやColumnの中で「空いてるスペースをめいっぱい使いたい」ウィジェットに使うラッパー
-          //
-          // これを使用すると、ある子は必要なだけのスペースを埋め（この場合は NavigationRail）
-          // 別のウィジェットは残りのスペースをできる限り埋める（この場合は Expanded）
-          Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: page,
-            ),
-          ),
-        ],
-      ),
+        );
+      }
     );
   }
 }
