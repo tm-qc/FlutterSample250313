@@ -135,8 +135,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // Scaffold：親要素。各ページに一つ使う
-    return Builder(
-      builder: (context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
         return Scaffold(
           // 横並びのレイアウト
           body: Row(
@@ -146,8 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 //　画面の左側に縦に並ぶメニュー（ナビゲーションバー）を作るためのウィジェット
                 child: NavigationRail(
                   // false の行は true に変更できます
+                  // constraints.maxWidth >= 600でラベル表示を切り替える幅の設定ができます
                   // そうすることで、アイコンの隣のラベルが表示されます
-                  extended: true,
+                  extended: constraints.maxWidth >= 600,
                   destinations: [
                     // 1つのメニュー項目（ボタン）を表すウィジェット
                     NavigationRailDestination(
