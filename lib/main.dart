@@ -126,8 +126,8 @@ class _MyHomePageState extends State<MyHomePage> {
         page = GeneratorPage();
         break;
       case 1:
-        // Placeholder という、配置した場所に十字が入った四角形を描画して、その部分の UI が未完成であることを示す便利なウィジェットを使用します
-        page = Placeholder();
+        // お気に入りリストFavoritesPageを表示
+        page = FavoritesPage();
         break;
       // selectedIndex が 0 でも 1 でもない場合にエラーをスロー
       default:
@@ -244,6 +244,41 @@ class GeneratorPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class FavoritesPage extends StatelessWidget {
+  const FavoritesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // アプリの現在の状態を取得
+    var appState = context.watch<MyAppState>();
+
+    // お気に入りのリストが空の場合は、中央寄せされた「No favorites yet*.*」というメッセージを表示
+    if (appState.favorites.isEmpty) {
+      return Center(
+        child: Text('No favorites yet.'),
+      );
+    }
+
+    // ListViewでスクロール可能なリストを表示
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          // 概要を表示します（例: You have 5 favorites*.*）
+          child: Text('You have '
+              '${appState.favorites.length} favorites:'),
+        ),
+        // すべてのお気に入りについて反復処理を行い、それぞれに ListTile を構築
+        for (var pair in appState.favorites)
+          ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text(pair.asLowerCase),
+          ),
+      ],
     );
   }
 }
