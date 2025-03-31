@@ -85,7 +85,7 @@ class MyAppState extends ChangeNotifier {
 
 }
 
-// StatefulWidget+serStateパターンの状態管理を作成
+// StatefulWidget+setStateパターンの状態管理を作成
 //
 // 書き方
 // ClassName StatefulWidgetクラスを定義（class MyHomePage extends StatefulWidget）
@@ -94,6 +94,19 @@ class MyAppState extends ChangeNotifier {
 // ※ここまではAndoroid Studioでクラス名を右クリック→コンテキストアクションの表示→Convert to StatefulWidgetをクリックで自動で雛形を作れる
 // ↓
 //_ClassName Stateクラスに変数定義し、setState()で状態管理ができる
+//
+// Stateクラスの簡単なまとめ
+//
+// ・ChangeNotifier：アプリ全体・複数画面で使う状態管理
+// 　　　　　　　　　　　画面をまたいで共有したい値、通知したい時に使う
+// ・StatefulWidget：StateをCreateするだけのクラス。build()がないので、Stateクラスとセットで使う
+// ・State：実際の値、UIを持つ。setState() を呼んで通知して画面を再描画する
+//
+// ・StatelessWidget：setState()が使えないので、状態をもてないということになるらしい
+// 　　　　　　　　　　　ただし、context.watch() や Consumer を使えば、外部の状態管理（ChangeNotifierなど）の値を使える
+// 　　　　　　　　　　　状態管理をもてないのが前提なので基本使わない方が個人的にはわかりやすいと個人的には思う
+// 　　　　　　　　　　　内部状態を持たない単純なUI、ただの表示・アイコン・ラベルなどに向いている。
+
 class MyHomePage extends StatefulWidget {
   // 警告：Constructors for public widgets should have a named 'key' parameter.が出てたので追加
   // FlutterのLintルール（コード品質のルール） のひとつで、公開クラス（外部から使われるWidget）にはkeyパラメータを明示的に定義するべきというルール
